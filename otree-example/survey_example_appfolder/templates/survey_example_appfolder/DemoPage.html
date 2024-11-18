@@ -1,0 +1,58 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+survey-example-group2
+{% endblock %}
+
+{% block content %}
+<br>
+<h2></h2>
+<hr>
+
+<form method="post">
+    
+
+    <!-- Gender -->
+    <div class="form-group">
+        <label>{{ form.Gender.label }}</label>
+        {{ form.Gender }}
+    </div>
+
+    <!-- Age -->
+    <div class="form-group">
+        <label>{{ form.Age.label }}</label>
+        {{ form.Age }}
+    </div>
+
+    <!-- Academic Status -->
+    <div class="form-group">
+        <label>{{ form.Academic_status.label }}</label>
+        {{ form.Academic_status }}
+    </div>
+
+    <!-- Marital Status -->
+    <div class="form-group">
+        <label>{{ form.Marital_status.label }}</label>
+        {{ form.Marital_status }}
+    </div>
+
+    <!-- Monthly Income -->
+    <div class="form-group">
+        <label>{{ form.Monthly_income.label }}</label>
+        {{ form.Monthly_income }}
+    </div>
+
+    <!-- Life Satisfaction Score -->
+    <div class="form-group">
+        <label>{{ form.life_satisfaction_score.label }}</label>
+        {{ form.life_satisfaction_score }}
+    </div>
+
+    <!-- Next Button -->
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">
+        Next
+    </button>
+</form>
+
+{% endblock %}
