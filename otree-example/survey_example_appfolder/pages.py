@@ -13,16 +13,15 @@ class Welcome(Page):
 
 class DemoPage(Page):
     form_model = Player
-    form_fields = ['Gender', 'Age', 'Academic_status', 'Marital_status','Monthly_income','life_satisfaction_score' ]
+    form_fields = ['Gender', 'Age', 'Academic_status', 'Marital_status','Monthly_income','life_satisfaction_score','Idea' ]
 
 class EndPage(Page):
     #style: this is a good example of the style 'CamelCase' that one normally uses for classes
     form_model = Player
-    form_fields = ['Idea']
 
 
     def vars_for_template(self):
-        return {'message': "Thank you for participating in the survey. You can now close the window.",}
+        return {'message': " You can now close the window.",}
 
 
 #Here we define in which ordering we want the pages to be shown. We always start with a Welcome page and end with an End page.
