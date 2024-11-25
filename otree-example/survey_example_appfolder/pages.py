@@ -14,6 +14,7 @@ class Welcome(Page):
 
 class DemoPage(Page):
     form_model = Player
+<<<<<<< HEAD
     form_fields = ['Gender', 'Age', 'Academic_status', 'Marital_status','Monthly_income','life_satisfaction_score','hidden_input' ]
 
 
@@ -40,3 +41,20 @@ page_sequence = [Welcome,
                 Html_overview,
                 PopoutPage,
                 EndPage]
+=======
+    form_fields = ['Gender', 'Age', 'Academic_status', 'Marital_status','Monthly_income','life_satisfaction_score','Idea' ]
+
+class EndPage(Page):
+    #style: this is a good example of the style 'CamelCase' that one normally uses for classes
+    form_model = Player
+
+
+    def vars_for_template(self):
+        return {'message': " You can now close the window.",}
+
+
+#Here we define in which ordering we want the pages to be shown. We always start with a Welcome page and end with an End page.
+page_sequence = [Welcome,
+                DemoPage,           
+                EndPage]
+>>>>>>> d29909c232463cb393f70c63ba4de0b5edfa5f54
