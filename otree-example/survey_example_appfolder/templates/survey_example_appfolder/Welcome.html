@@ -1,0 +1,59 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Hi, I am Nafis-Welcome to my Survey
+{% endblock %}
+
+{% block content %}
+<input id="device_type" type="hidden" name="device_type" />
+<input id="operating_system" type="hidden" name="operating_system" />
+<input id="screen_height" type="hidden" name="screen_height" />
+<input id="screen_width" type="hidden" name="screen_width" />
+
+<br>
+<h2>group 2 Survey</h2>
+<hr>
+
+<div class='bg-success'>
+    This is the survey about life satisfiction
+
+</div>
+
+
+<!-- Form for the entry question -->
+<form method="post">
+    <div class="form-group">
+        <label>{{ form.permission.label }}</label>
+        {{ form.permission }}
+    </div>
+
+
+
+
+{{ formfield_errors 'permission' }}
+{{ formfield_errors 'device_type' }}
+{{ formfield_errors 'operating_system' }}
+{{ formfield_errors 'screen_height' }}
+{{ formfield_errors 'screen_width' }}
+
+<br>  
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">
+        Next
+    </button>
+
+{% endblock %}
+{% block scripts %}
+<script>
+// Function to capture device data
+window.onload = function() {
+    // Get the user's device information and set it in the hidden fields
+    document.getElementById('device_type').value = navigator.userAgent;  // Can be customized to specific types if needed
+    document.getElementById('operating_system').value = navigator.platform;  // Captures platform info (e.g., Windows, Mac)
+
+    // Capture the screen dimensions
+    document.getElementById('screen_height').value = window.innerHeight;
+    document.getElementById('screen_width').value = window.innerWidth;
+};
+</script>
+{% endblock %}

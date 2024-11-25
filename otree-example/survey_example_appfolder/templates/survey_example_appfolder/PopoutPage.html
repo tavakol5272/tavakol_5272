@@ -1,0 +1,77 @@
+{% extends "global/GlobalPopout.html" %}
+{% load otree static %}
+
+{% block title %}
+Life Satisfaction Survey
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Get variables for the popout 
+    var picYes = document.getElementById('picYes');
+    var divYes = document.getElementById('divYes');
+    var picNo = document.getElementById('picNo');
+    var divNo = document.getElementById('divNo');
+
+    // POPOUT: we are going to create a popout function that displays text only if some value is given in another question
+    function popout() {
+        console.log('searching for the elements');
+        if (picYes.checked == true) {
+            console.log('yes');
+            divNo.style.display = "none";
+            divYes.style.display = "block";
+        }
+        if (picNo.checked == true) {
+            console.log('no');
+            divYes.style.display = "none";
+            divNo.style.display = "block";
+        }
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- this is how we implement a time taking variable  -->
+<input id="time_popout" type="hidden" name="time_popout" />
+<br>
+<h2>  </h2>
+<hr>
+<p>Please select one of the following pictures that best reflects your satisfaction:</p>
+
+<div>
+    <!-- Picture for "Satisfied" -->
+    <label for="picYes">
+        <input id="picYes" type="radio" name="pic" value="pic-yes" onclick="popout()" />
+        <img src="{% static 'pic-yes.jpg' %}" alt="Picture Yes (Satisfied)" style="max-width: 200px; cursor: pointer;" />
+        <p>I am satisfied with my life</p>
+    </label>
+    <br>
+    <br>
+    <br>
+    <!-- Picture for "Dissatisfied" -->
+    <label for="picNo">
+        <input id="picNo" type="radio" name="pic" value="pic-no" onclick="popout()" />
+        <img src="{% static 'pic-no.jpg' %}" alt="Picture No (Dissatisfied)" style="max-width: 200px; cursor: pointer;" />
+        <p>I am dissatisfied with my life</p>
+    </label>
+    <br>
+</div>
+
+<!-- question for "Satisfied" -->
+<div id="divYes" style="display: none">
+    <p><b>Excellent. What is the most important factor affecting your life satisfaction?</b></p>
+    <input type="text" name="popout_yes" />
+</div>
+
+<!-- question for "Dissatisfied" -->
+<div id="divNo" style="display: none">
+    <p><b>Sorry to hear that. What is the most important factor affecting your life dissatisfaction?</b></p>
+    <input type="text" name="popout_no" />
+</div>
+
+<br>
+<button class="otree-btn-next btn btn-primary next-button otree-next-button">
+    Next
+</button>
+
+{% endblock %}
