@@ -1,34 +1,57 @@
 {% extends "global/Page.html" %}
 {% load otree static %}
 
+{% block scripts %}
+<script>
+    window.onload = function () {
+
+//import variables 
+var screenout = {{ screenout }}; //screenout boolean
+var quota= {{ quota }}; //quota boolean
+var label = {{ participant_label }}; //m or tic number
+
+
+// for the purpose of this seminar we have html files instead of links
+var url_screenout = "/static/ScreenoutLink.html";
+var url_quota = "/static/QuotaFullLink.html";
+
+//build urls 
+//var url_screenout = "https://mingle.respondi.com/s/1608318/ospe.php3?c_0002=0&return_tic=" + label;
+//c_002 = 0
+
+//var url_quota = "https://mingle.respondi.com/s/1608318/ospe.php3?c_0002=2&return_tic=" + label; 
+//c_002 = 2
+
+if (screenout==1) {window.location.replace(url_screenout);}
+if (quota==1) {window.location.replace(url_quota);} 
+
+}
+</script>
+
+
+{% endblock %}
+
 {% block title %}
-survey-example-group2
 {% endblock %}
 
 {% block content %}
 <br>
-<h2>  </h2>
+<h2> Survey Example group 2 </h2>
 <hr>
-
+please read the following question and answer carefully
+<br>
 
 <form method="post">
-    
-
-    
+     
     <div class="form-group">
-        <label>{{ form.Gender.label }}</label>
-        {{ form.Gender }}
+        <label>{{ form.gender.label }}</label>
+        {{ form.gender }}
     </div>
     <br>
 
-<<<<<<< HEAD
-    
-=======
-   
->>>>>>> d29909c232463cb393f70c63ba4de0b5edfa5f54
     <div class="form-group">
-        <label>{{ form.Age.label }}</label>
-        {{ form.Age }}
+        <label>{{ form.age.label }}</label>
+        {{ form.age }}
     </div>
     <br>
 
@@ -53,37 +76,20 @@ survey-example-group2
     </div>
     <br>
 
-<<<<<<< HEAD
-    
-=======
-   
->>>>>>> d29909c232463cb393f70c63ba4de0b5edfa5f54
+
     <div class="form-group">
         <label>{{ form.life_satisfaction_score.label }}</label>
         {{ form.life_satisfaction_score }}
     </div>
     <br>
-<<<<<<< HEAD
 
 
     
-    <input type="hidden" name="hidden_input">
-    <br>
+<!-- we can also have variables that are not displayed and work in the background -->
+<input type="hidden" name="hidden_input">
 
-=======
-
-    
-   <div class="form-group">
-    <label>{{ form.Idea.label }}</label>
-    {{ form.Idea }}
-   </div>
-   <br> 
-
-   
->>>>>>> d29909c232463cb393f70c63ba4de0b5edfa5f54
-    <button class="otree-btn-next btn btn-primary next-button otree-next-button">
-        Next
-    </button>
-</form>
+<button class="otree-btn-next btn btn-primary next-button otree-next-button">
+    Next
+</button>
 
 {% endblock %}

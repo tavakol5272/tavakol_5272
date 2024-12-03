@@ -8,7 +8,7 @@ from otree.api import (
     Currency as c,
     currency_range,
 )
-import random
+import random 
 from survey_example_appfolder.HelperFunctions import random_number
 
 author = 'Nafiseh Tavakol in group 2'
@@ -21,12 +21,18 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
+        # Initialize gender quotas and counts
+        self.session.vars['gender_quota'] = {'Male': 25, 'Female': 20, 'Other': 5}
+        self.session.vars['gender_counts'] = {'Male': 0, 'Female': 0, 'Other': 0}
+
+        # Iterate over players and assign groups
         for p in self.get_players():
             p.group_assignment = random.choice(['pic-yes', 'pic-no'])
             if p.group_assignment == 'pic-yes':
                 p.popout_yes = "Excellent. What is the most important factor affecting your life satisfaction?"
             else:
                 p.popout_no = "Sorry to hear that. What is the most important factor affecting your life dissatisfaction?"
+
 
 class Group(BaseGroup):
     counter = models.IntegerField(initial=0)
@@ -42,7 +48,11 @@ class Group(BaseGroup):
     
 
 class Player(BasePlayer):
-<<<<<<< HEAD
+    
+    #variables on the HelperFunctions.py
+    screenout = models.BooleanField(initial=0)
+    quota = models.BooleanField(initial=0)
+
     # Welcome
     device_type = models.StringField()
     operating_system = models.StringField()
@@ -51,14 +61,17 @@ class Player(BasePlayer):
     permission = models.StringField(
         label="If you are sure that you want to participate in this survey, please type: OK",
     )
+    eligible_question = models.IntegerField()
 
     # Demo page
-    Gender = models.StringField(
+    gender = models.StringField(
         label="1- What is your gender?",
-        choices=["Male", "Female", "Non-binary", "Prefer not to say"],
+        choices=["Male", "Female", "Other"],
         widget=widgets.RadioSelect,
     )
-    Age = models.IntegerField(label="2- How old are you?", max=110, min=1)
+    age = models.IntegerField(label="2- How old are you?", max=110, min=1)
+    
+    
     Academic_status = models.StringField(
         label="3- What is your level of education?",
         choices=["Undergraduate", "Diploma", "Bachelor", "Master", "PhD", "Other"],
@@ -79,6 +92,9 @@ class Player(BasePlayer):
     )
 
     hidden_input = models.IntegerField(initial=50, blank=True)
+       
+
+        
 
     # Popout Page
     pic = models.StringField(
@@ -91,33 +107,4 @@ class Player(BasePlayer):
     time_popout = models.StringField(initial='-999')
 
     # End Page
-    group_assignment = models.StringField()
-=======
-    #this is the most important feature of this file. We can collect all the variables used on the html pages here
-    
-#The Variables are structured on the base of pages
-    permission = models.StringField(label="if you are sure that you want to participate in this survey please type: OK ",blank=True,)
-    Gender = models.StringField(label="1- What is your gender? ",
-        choices=["Male", "Female", "Non-binary", "prefer not to say "],
-        widget=widgets.RadioSelect,)
-    
-    Age = models.IntegerField(label="2- How old are you? ", max=110, min=1, )  
-
-    Academic_status = models.StringField(label="3- What is your level of education? ",
-        choices=["Undergraduate","Diploma","Bachelor", "Master", "PHD", "Other"]
-        , widget=widgets.RadioSelect,)
-    
-    Marital_status =   models.StringField(label="4- What is your Marital Status? ",
-        choices=["Married", "Single", "Have partner", "prefer not to say"]
-        , widget=widgets.RadioSelect,)
-    
-    Monthly_income = models.IntegerField(label="5- What is your net monthly income(Euro)? ", max=20000, min=1, )
-    
-    life_satisfaction_score= models.IntegerField(label="6- How satisfied are you with your overall life?(1-100)? <br>", max=100, min=1, )
-    
-    Idea = models.StringField(label="7- What is your idea about this survey? ",blank=True,)
-    
-
-    
-                        
->>>>>>> d29909c232463cb393f70c63ba4de0b5edfa5f54
+    group_assignment = models.IntegerField()
