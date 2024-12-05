@@ -22,16 +22,21 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
     def creating_session(self):
         # Initialize gender quotas and counts
-        self.session.vars['gender_quota'] = {'Male': 25, 'Female': 20, 'Other': 5}
+        self.session.vars['gender_quota'] = {'Male': 2, 'Female': 2, 'Other': 1}
         self.session.vars['gender_counts'] = {'Male': 0, 'Female': 0, 'Other': 0}
 
         # Iterate over players and assign groups
         for p in self.get_players():
-            p.group_assignment = random.choice(['pic-yes', 'pic-no'])
-            if p.group_assignment == 'pic-yes':
+           
+    # Check the participant's selected picture
+            if p.pic == 'pic-yes':
+                p.group_assignment = 'pic-yes'
                 p.popout_yes = "Excellent. What is the most important factor affecting your life satisfaction?"
-            else:
+            elif p.pic == 'pic-no':
+                p.group_assignment = 'pic-no'
                 p.popout_no = "Sorry to hear that. What is the most important factor affecting your life dissatisfaction?"
+        for p in self.get_players():
+             p.group_assignment = ''  # Initialize with an empty string
 
 
 class Group(BaseGroup):
@@ -40,9 +45,9 @@ class Group(BaseGroup):
     
     def assign_satisfaction_group(self, player, pic):
         if pic == "pic-yes":
-            self.life_satis_group = "satisfied"
+            self.life_satis_group = 'satisfied'
         else:
-            self.life_satis_group = "dissatisfied"
+            self.life_satis_group = 'dissatisfied'
         player.group_assignment = self.life_satis_group
         return f"Player assigned to {self.life_satis_group} group."
     
@@ -52,6 +57,7 @@ class Player(BasePlayer):
     #variables on the HelperFunctions.py
     screenout = models.BooleanField(initial=0)
     quota = models.BooleanField(initial=0)
+    redirect_url = models.StringField(blank=True)
 
     # Welcome
     device_type = models.StringField()
@@ -105,6 +111,7 @@ class Player(BasePlayer):
     popout_yes = models.StringField(blank=True)
     popout_no = models.StringField(blank=True)
     time_popout = models.StringField(initial='-999')
-
+    
     # End Page
-    group_assignment = models.IntegerField()
+    group_assignment = models.StringField(blank=True)
+

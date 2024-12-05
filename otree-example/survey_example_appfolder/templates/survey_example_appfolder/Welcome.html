@@ -5,7 +5,11 @@
     Hi, I am Nafis-Welcome to my Survey
 {% endblock %}
 
+
 {% block content %}
+<p><strong>Participant Label:</strong> {{ participant_label }}</p>
+
+
 <input id="device_type" type="hidden" name="device_type" />
 <input id="operating_system" type="hidden" name="operating_system" />
 <input id="screen_height" type="hidden" name="screen_height" />
@@ -20,7 +24,8 @@
 <hr>
 
 <div class='bg-success'>
-    This is the survey about life satisfiction. </div>
+    This is the survey about life satisfiction.
+</div>
 
 
 <form method="post">
@@ -30,44 +35,46 @@
     </div>
     <br>
 
-<p><b>do you have enough time to take part in this survey( it takes about 20 min)??</b></p>
-<input type="radio" name="eligible_question" value="1" class="persist"/> Yes
-<br>
-<input type="radio" name="eligible_question" value="2" class="persist"/> No
-<br>
+    <p><b>do you have enough time to take part in this survey( it takes about 20 min)??</b></p>
+    <input type="radio" name="eligible_question" value="1" class="persist"/> Yes
+    <br>
+    <input type="radio" name="eligible_question" value="2" class="persist"/> No
+    <br>
 
 
 
-{{ formfield_errors 'permission' }}
-{{ formfield_errors 'device_type' }}
-{{ formfield_errors 'operating_system' }}
-{{ formfield_errors 'screen_height' }}
-{{ formfield_errors 'screen_width' }}
+    {{ formfield_errors 'permission' }}
+    {{ formfield_errors 'device_type' }}
+    {{ formfield_errors 'operating_system' }}
+    {{ formfield_errors 'screen_height' }}
+    {{ formfield_errors 'screen_width' }}
 
-<br>  
+    <br>  
 <!-- you might see that this button looks differnt. It is because we used bootstrap classes
 to customize it. Bootstrap classes are essentially a premade layout that you can just 'load'
 by including it in the class. you can find more options on their website:
 https://getbootstrap.com/docs/5.2/components/buttons/.
 They also have more options for other elements -->
-<button class="otree-btn-next btn btn-outline-success next-button otree-next-button">
-    Next
-</button>
+    <button class="otree-btn-next btn btn-outline-success next-button otree-next-button">
+       Next
+    </button>
+</form>
+{% endblock %}
 
 
 
-
+{% block scripts %}
 <script>
 // Function to capture device data
-window.onload = function() {
+    window.onload = function() {
     // Get the user's device information and set it in the hidden fields
-    document.getElementById('device_type').value = navigator.userAgent;  // Can be customized to specific types if needed
-    document.getElementById('operating_system').value = navigator.platform;  // Captures platform info (e.g., Windows, Mac)
+        document.getElementById('device_type').value = navigator.userAgent;  // Can be customized to specific types if needed
+        document.getElementById('operating_system').value = navigator.platform;  // Captures platform info (e.g., Windows, Mac)
 
     // Capture the screen dimensions
-    document.getElementById('screen_height').value = window.innerHeight;
-    document.getElementById('screen_width').value = window.innerWidth;
-};
+        document.getElementById('screen_height').value = window.innerHeight;
+        document.getElementById('screen_width').value = window.innerWidth;
+    };
 </script>
 
 

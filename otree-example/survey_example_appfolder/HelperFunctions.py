@@ -23,20 +23,38 @@ We encode those three different event in three different variables (booleans) to
 
 '''
 
-def detect_screenout(self):
-    '''this function will check for characteristics a participant needs to 
-    take part in the survey, (f.e. a certain age or being eligible to vote)'''
-
-    if self.player.eligible_question == 2: # screen out anybody that is not eligible
+def detect_screenout_eligible(self):
+    
+    if self.player.eligible_question == 2: 
         self.player.screenout = 1
+        self.player.redirect_url = "/static/ScreenoutLink.html"
+
+def detect_screenout_age(self):
+    
+    if self.player.age is not None and self.player.age > 40: 
+        self.player.screenout = 1
+        self.player.redirect_url = "/static/ScreenoutLink.html"
+
 
 def detect_quota(self):
-    '''this function will check if a quota is already filled'''
-    participant_number = self.group.counter
-    #declare quota reached if we have more than 1 participant that started
-    if participant_number > 1:
+    '''Check if a quota is already filled and set redirect URL.'''
+    gender_counts = self.session.vars['gender_counts']
+    gender_quota = self.session.vars['gender_quota']
+    gender = self.player.gender
+
+    # Directly use counts and quotas since genders are validated
+    if gender_counts[gender] >= gender_quota[gender]:
         self.player.quota = 1
-    return None
+        self.player.redirect_url = "/static/QuotaFullLink.html"
+    else:
+        gender_counts[gender] += 1
+ 
+
+def set_participant_label(self, label):
+    
+    self.player.participant_label = label
+
+
 
 # def participant_count(self):
 #     '''if we want to count different things we might also implement a function here.

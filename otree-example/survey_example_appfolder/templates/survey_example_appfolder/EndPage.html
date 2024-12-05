@@ -3,7 +3,9 @@
 
 
 {% block title %}
+    Survey Completed
 {% endblock %}
+
 
 {% block scripts %}
 <script>
@@ -14,16 +16,20 @@
 
     //depending on in which group a player was we want to display a custom message
     //we need to first get the elements we want to show
-    var div_group0 = document.getElementById('group0');
-    var div_group1 = document.getElementById('group1');
+
+    window.onload = function () {
+        var divNo = document.getElementById('pic-no');
+        var divYes = document.getElementById('pic-yes');
 
     //we can do this with a javascript function:
-    if (group_assignment == "satisfied") {
-        div_group0.style.display = "block";
-    }
-    if (group_assignment == "dissatisfied") {
-        div_group1.style.display = "block";
-    }
+        if (group_assignment == "pic-no") {
+            divNo.style.display = "block";
+        }
+        if (group_assignment == "pic-yes") {
+            divYes.style.display = "block";
+        }
+
+    };
 
     // if(condition){
     //     what happens when condition is met
@@ -34,16 +40,24 @@
 
 {% block content %}
 <br>
-<h2> Survey Example </h2>
+<h2>  </h2>
 <hr>
 
 <h2>The End </h2>
 
+<p>Participant Label: {{ participant_label }}</p>
+
+
+
+
+
 Thank you so much for your time!!!
-<div id="group0" style="display: none">You were part of group 0!
-</div>
-<div id="group1" style="display: none">You were part of group 1!</div>
 <br>
+<div id="pic-yes" style="display: none">You are satisfied! </div>
+<div id="pic-no" style="display: none">You are dissatisfied!</div>
+<br>
+
+
 
 
 <button class="otree-btn-next btn btn-primary next-button otree-next-button">
