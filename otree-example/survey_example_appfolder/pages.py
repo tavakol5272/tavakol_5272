@@ -3,9 +3,8 @@ from ._builtin import Page, WaitPage
 from .models import Constants, Player
 
 
-#from survey_example_appfolder.HelperFunctions import detect_screenout_age, detect_screenout_eligible, detect_quota
 
-
+from survey_example_appfolder.HelperFunctions import detect_screenout_age, detect_screenout_eligible, detect_quota
 
 
 class Welcome(Page):
@@ -15,14 +14,12 @@ class Welcome(Page):
     
         #with the function before_next_page you can can control what should happen. It is a nice feature for filtering
     #or also setting variables
+    
     def before_next_page(self):
-        from .HelperFunctions import detect_screenout_eligible
-        
         detect_screenout_eligible(self)
 
         if self.player.screenout:
             return
-    
     
     def vars_for_template(self):
         #print("Participant Label on Welcome Page:", self.participant.label)
@@ -35,19 +32,13 @@ class DemoPage(Page):
     form_fields = ['gender', 'age', 'Academic_status', 'Marital_status', 'Monthly_income', 'life_satisfaction_score', 'hidden_input']
 
     def before_next_page(self):
-        from .HelperFunctions import detect_screenout_age, detect_quota
 
         detect_screenout_age(self)
         
-        if self.player.screenout:
-            #self.player.redirect_url = "/static/ScreenoutLink.html"
-            return
-        
         detect_quota(self)
-        if self.player.quota:
-            #self.player.redirect_url = "/static/QuotaFullLink.html"
+        
+        if self.player.screenout:
             return
-
 
     def vars_for_template(self):
         return {
@@ -68,6 +59,12 @@ class PopoutPage(Page):
     form_model = Player
     form_fields = ['pic', 'popout_yes', 'popout_no', 'time_popout']
     
+    def vars_for_template(self):
+        return {
+            'participant_label': safe_json(self.participant.label),
+            'screenout': safe_json(self.player.screenout),
+            'quota': safe_json(self.player.quota)
+        }
 
     def before_next_page(self):
         if self.player.pic == 'pic-yes':
@@ -87,21 +84,8 @@ class EndPage(Page):
     
 class RedirectPage(Page):
     def vars_for_template(self):
-        # Determine the redirect URL based on conditions
-        if self.player.screenout:
-            redirect_url = '/static/ScreenoutLink.html'
-        elif self.player.quota:
-            redirect_url = '/static/QuotaFullLink.html'
-        else:
-            redirect_url = '/static/CompleteLink.html'
-        
-
-        return {
-            "participant_label": self.participant.label,
-            "quota": self.player.quota,
-            "screenout": self.player.screenout,
-            "redirect_url": redirect_url,  # Use the dynamically determined redirect URL
-        }
+        return {'participant_label': safe_json(self.participant.label)}
+    
 
     form_model = Player
 

@@ -27,13 +27,14 @@ def detect_screenout_eligible(self):
     
     if self.player.eligible_question == 2: 
         self.player.screenout = 1
-        self.player.redirect_url = "/static/ScreenoutLink.html"
+        
 
 def detect_screenout_age(self):
     
     if self.player.age is not None and self.player.age > 40: 
         self.player.screenout = 1
-        self.player.redirect_url = "/static/ScreenoutLink.html"
+        
+
 
 
 def detect_quota(self):
@@ -45,7 +46,6 @@ def detect_quota(self):
     # Directly use counts and quotas since genders are validated
     if gender_counts[gender] >= gender_quota[gender]:
         self.player.quota = 1
-        self.player.redirect_url = "/static/QuotaFullLink.html"
     else:
         gender_counts[gender] += 1
  

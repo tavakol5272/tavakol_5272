@@ -2,21 +2,12 @@
 <script>
     // window onload guarantees that the first thing once the window is loaded is executing this function
     window.onload = function () {
-        var label = "{{ participant_label }}"; // Ensure it's passed as a string
-        var screenout = {{ screenout }}; // Boolean from the backend
-        var quota = {{ quota }}; // Boolean from the backend
-
-        var redirect_url;
-        if (screenout) {
-            redirect_url = '/static/ScreenoutLink.html';
-        } else if (quota) {
-            redirect_url = '/static/QuotaFullLink.html';
-        } else {
-            redirect_url = '/static/CompleteLink.html';
-        }
-
-        window.location.href = redirect_url;
-    };
+        var label = {{ participant_label }}; // Ensure it's passed as a string
+    
+        // Redirect to the CompleteLink.html page
+    var complete_link = "/static/CompleteLink.html";
+    window.location.href = complete_link;
+    }
     //var complete_link = "https://mingle.respondi.com/s/1608318/ospe.php3?c_0002=1&return_tic=" + label;
     //c_002=1
 
