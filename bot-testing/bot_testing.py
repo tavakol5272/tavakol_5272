@@ -4,94 +4,179 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import random
 import string
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import sys
+sys.path.append('E:/Neuer Ordner/konstany study/winter 24.25/online survey/tutorial/seminar/online_survey/tavakol_5272/otree-example/survey_example_appfolder')
+#from survey_example_appfolder.HelperFunctions import  detect_quota
+#from .models import Constants, Player
+
+
+
 
 # this is the session wide link
-link = 'http://localhost:8000/join/bofohadi'
+link = 'http://localhost:8000/join/babinopa'
 
 def build_driver():
     # Set up the driver
-    return webdriver.Chrome() #(ChromeDriverManager().install())
+    return webdriver.Chrome()
 
 
 def check_exists_by_xpath(driver, xpath):
     try:
         x = driver.find_element(By.XPATH, xpath)
         if x.is_displayed():
-            return 1
-    except NoSuchElementException:
-        return 0
+            return True
+    except Exception as e:
+        print(f"Error on check exist: {e}")
+    return False
+
+
+def wait_for_element(driver, by, locator, timeout=10):
+    print(f"Waiting for element: {locator}")
+    return WebDriverWait(driver, timeout).until(EC.presence_of_element_located((by, locator)))
 
 
 def welcome_page(driver):
-    # Give input to the entry question - find the element by its id
-    entry_question_id = 'id_entry_question'
-    entry_question_input = 'Testing Input for Entry Question'
-    driver.find_element(By.ID, entry_question_id).send_keys(entry_question_input)
-    # eligible
-    eligible = driver.find_elements(By.NAME, 'eligible_question')
-    rand_selection = random.randint(0, len(eligible) - 1)
-    eligible[rand_selection].click()
-    # next button
-    driver.find_element(By.XPATH, '//*[@id ="form"]/div/button').click()
-    return rand_selection
+    try:
+        # permission
+        entry_question_id = driver.find_element(By.ID, 'permission') 
+        entry_question_id.send_keys("ok")
+       # eligible
+        eligible = driver.find_elements(By.NAME, 'eligible_question')
+        if eligible:
+            rand_selection = random.randint(0, len(eligible) - 1)
+            eligible[rand_selection].click()
+
+        if rand_selection == 2:  # Assuming `2` triggers screenout
+            print("Participant screened out due to eligibility question.")
+            return
+        
+        # next button
+        next_button = wait_for_element(driver, By.XPATH, '//*[@id="form"]/div/button')
+        next_button.click()
+    except Exception as e:
+        print(f"Error on the Welcome page: {e}")
+        #driver.quit()
+
 
 
 def demo_page(driver):
-    xpath = "//*[@id='id_age_question']"
-    age = random.randint(1,30)
-    driver.find_element(By.XPATH, xpath).send_keys(str(age))
-    # gender field
-    gender = driver.find_elements(By.NAME, 'gender')
-    rand_selection = random.randint(0, len(gender) - 1)
-    gender[rand_selection].click()
-    # next
-    driver.find_element(By.XPATH, '//*[@id ="form"]/div/button').click()
+    try:
+        
+        # gender field
+        gender = driver.find_elements(By.NAME, 'gender')
+        if gender:
+            rand_selection = random.randint(0, len(gender) - 1)
+            gender[rand_selection].click()
 
+        #age
+        age_fill = wait_for_element(driver, By.XPATH, "//*[@id='id_age']")
+        age = random.randint(1,110)
+        age_fill.send_keys(str(age))
+        if age > 40:
+            print("Participant screened out due to age.")
+            return
+        #education
+        academic_fill = driver.find_elements(By.NAME, 'Academic_status')
+        if academic_fill:
+            random.choice(academic_fill).click()
+        #Marital field
+        marital_fill = driver.find_elements(By.NAME, 'Marital_status')
+        if marital_fill:
+            random.choice(marital_fill).click()
+        
+        #income
+        income_fill = driver.find_element(By.NAME, 'Monthly_income')
+        income = random.randint(1, 20000)  
+        income_fill.send_keys(str(income))
 
+        #life_satisfaction
+        satisfaction_fill = driver.find_element(By.NAME, 'life_satisfaction_score')
+        satisfaction = random.randint(1, 100)  
+        satisfaction_fill.send_keys(str(satisfaction))
+        
+        # next button
+        next_button = wait_for_element(driver, By.XPATH, '//*[@id ="form"]/div/button')
+        next_button.click()
+    except Exception as e:
+        print(f"Error on the Demo page: {e}")
+        #driver.quit()
+    
+    
+    
 def onlyOneGroup(driver):
-    # Find the element by its tag
+    #Find the element by its tag
     driver.find_element(By.TAG_NAME, 'button').click()
 
+def popout_page(driver):
+    try:
 
-def Merkel_baker(driver):
-    # two radio buttons
-    yes = '//*[@id="merkelYes"]'
-    no = '//*[@id="merkelNo"]'
-    select = random.randint(0, 1)
-    input_text = ''.join(random.choice(string.ascii_letters) for i in range(random.randint(1, 10)))
-    if select == 0:
-        driver.find_element(By.XPATH, yes).click()
-        # how did you find out
-        driver.find_element(By.XPATH, '//*[@id="divYes"]/input').send_keys(input_text)
-    else:
-        driver.find_element(By.XPATH, no).click()
-        # do you not read the news
-        driver.find_element(By.XPATH, '//*[@id="divNo"]/input').send_keys(input_text)
-    # next button
-    driver.find_element(By.XPATH, '//*[@id = "form"]/div/button').click()
+        # Select a random picture
+        pic_options = driver.find_elements(By.NAME, 'pic')
+        if pic_options:
+            satis_pic = random.choice(pic_options)
+            satis_pic.click()
 
+            if satis_pic.get_attribute("value") == "pic-yes":
+                reason = driver.find_element(By.XPATH, '//*[@id="divYes"]/input')
+                reason.send_keys("I am satisfied")
+            else:
+                reason= driver.find_element(By.XPATH, '//*[@id="divNo"]/input')
+                reason.send_keys("I am dissatisfied")
 
-def end_of_survey(driver):
-    # submit button
-    driver.find_element(By.XPATH, '//*[@id = "form"]/div/button').click()
+        # next button
+        next_button = driver.find_element(By.XPATH, '//*[@id ="form"]/div/button')
+        next_button.click()
+    except Exception as e:
+        print(f"Error on the popout page: {e}")
+        driver.quit()
+       
+
+def end_page(driver):
+    try:
+        next_button = driver.find_element(By.XPATH, '//*[@id = "form"]/div/button')
+        next_button.click()
+    except Exception as e:
+        print(f"Error on the end page: {e}")
+        driver.quit()
 
 
 def run_bots(no_times, link):
-    driver = build_driver()  # initialize the driver
-    for i in range(no_times):  # go through the survey several times
-        driver.get(link)  # open the browser to the url of your survey
-        # check if one can do th survey(e.g. if quota is full start page is not shown(in our case 20 participants)
-        if check_exists_by_xpath(driver, "//*[@id='id_entry_question']") == 1:
-            x = welcome_page(driver) # check whether they are eligible
-            if x == 1:  # then they are not eligible, otherwise no next page
+    for i in range(no_times):
+        driver = build_driver()  # Initialize the driver
+        try:
+            driver.get(link)  # Open the survey URL
+            
+            # Welcome page
+            if check_exists_by_xpath(driver, "//*[@id='id_permission']") == 1:
+                welcome_page(driver)
+            
+            # Detect screenout after Welcome page
+            if check_exists_by_xpath(driver, "//*[contains(text(), 'Screenout')]"):
+                print("Participant screened out after Welcome page.")
                 continue
-        demo_page(driver) # demo-page(age, gender etc)
-#       # check if extra site is shown to you shown
-        if check_exists_by_xpath(driver, '//*[@id="form"]/div/h3') == 1:
-            onlyOneGroup(driver)
-        Merkel_baker(driver)
-        end_of_survey(driver)
+            
+            # Demo page
+            demo_page(driver)
+            
+            # Detect quota redirect after Demo page
+            if check_exists_by_xpath(driver, "//*[contains(text(), 'Quota Full')]"):
+                print("Participant redirected due to full quota.")
+                continue
+            
+            # Popout page
+            popout_page(driver)
+            
+            # End page
+            end_page(driver)
+            print("complete successfully")
+        
+        except Exception as e:
+              print(f"Error on the popout page: {e}")
+        finally:
+              driver.quit()  
     print("Success!")
 
 
-run_bots(no_times=20, link=link)
+run_bots(no_times=5, link=link)

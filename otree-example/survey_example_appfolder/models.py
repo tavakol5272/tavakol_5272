@@ -55,46 +55,46 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     
     #variables on the HelperFunctions.py
-    screenout = models.BooleanField(initial=0)
-    quota = models.BooleanField(initial=0)
+    screenout = models.BooleanField(initial=0,blank=True)
+    quota = models.BooleanField(initial=0,blank=True)
     redirect_url = models.StringField(blank=True)
 
     # Welcome
-    device_type = models.StringField()
-    operating_system = models.StringField()
-    screen_height = models.IntegerField(initial=0)
-    screen_width = models.IntegerField(initial=0)
+    device_type = models.StringField(blank=True)
+    operating_system = models.StringField(blank=True)
+    screen_height = models.IntegerField(initial=0,blank=True)
+    screen_width = models.IntegerField(initial=0,blank=True)
     permission = models.StringField(
-        label="If you are sure that you want to participate in this survey, please type: OK",
+        label="If you are sure that you want to participate in this survey, please type: OK", blank=True,
     )
-    eligible_question = models.IntegerField()
+    eligible_question = models.IntegerField(blank=True)
 
     # Demo page
     gender = models.StringField(
         label="1- What is your gender?",
         choices=["Male", "Female", "Other"],
-        widget=widgets.RadioSelect,
+        widget=widgets.RadioSelect, blank=True,
     )
-    age = models.IntegerField(label="2- How old are you?", max=110, min=1)
+    age = models.IntegerField(label="2- How old are you?", max=110, min=1,blank=True,)
     
     
     Academic_status = models.StringField(
         label="3- What is your level of education?",
         choices=["Undergraduate", "Diploma", "Bachelor", "Master", "PhD", "Other"],
-        widget=widgets.RadioSelect,
+        widget=widgets.RadioSelect,blank=True,
     )
     Marital_status = models.StringField(
         label="4- What is your marital status?",
         choices=["Married", "Single", "Have partner", "Prefer not to say"],
-        widget=widgets.RadioSelect,
+        widget=widgets.RadioSelect,blank=True,
     )
     Monthly_income = models.IntegerField(
-        label="5- What is your net monthly income (Euro)?", max=20000, min=1
+        label="5- What is your net monthly income (Euro)?", max=20000, min=1,blank=True,
     )
     life_satisfaction_score = models.IntegerField(
         label="6- How would you rate your level of satisfaction with your life (1-100)?",
         max=100,
-        min=1,
+        min=1,blank=True,
     )
 
     hidden_input = models.IntegerField(initial=50, blank=True)
@@ -106,11 +106,11 @@ class Player(BasePlayer):
     pic = models.StringField(
         label="7- Life satisfaction - please select one picture.",
         choices=["pic-yes", "pic-no"],
-        widget=widgets.RadioSelect,
+        widget=widgets.RadioSelect, blank=True,
     )
     popout_yes = models.StringField(blank=True)
     popout_no = models.StringField(blank=True)
-    time_popout = models.StringField(initial='-999')
+    time_popout = models.StringField(initial='-999',blank=True)
     
     # End Page
     group_assignment = models.StringField(blank=True)
