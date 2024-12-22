@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 # this is the session wide link
-link = 'http://localhost:8000/join/vinibevo'
+link = 'http://localhost:8000/join/jepuhusa'
 
 def build_driver():
     # Set up the driver
@@ -28,14 +28,13 @@ def check_exists_by_xpath(driver, xpath):
 
 
 def wait_for_element(driver, by, locator, timeout=7):
-    print(f"Waiting for element: {locator}")
-    return WebDriverWait(driver, timeout).until(EC.presence_of_element_located((by, locator)))
-
+    return WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((by, locator)))
 
 def welcome_page(driver):
     try:
         # permission
         entry_question_id = driver.find_element(By.NAME, 'permission') 
+        driver.execute_script("arguments[0].click();", entry_question_id)  
         entry_question_id.send_keys("ok")
        # eligible
         eligible = driver.find_elements(By.NAME, 'eligible_question')
@@ -43,14 +42,13 @@ def welcome_page(driver):
             rand_selection = random.randint(0, len(eligible) - 1)
             eligible[rand_selection].click()
 
-            if eligible[rand_selection].get_attribute("value") == "2":
+            if eligible[rand_selection].get_dom_attribute("value") == "2":
                print("screened-eligibility question.")
                return False
 
         
         # next button
-        next_button = wait_for_element(driver, By.XPATH, '//*[@id="form"]/div/button')
-        next_button.click()
+        driver.execute_script("arguments[0].click();", driver.find_element(By.XPATH, '//*[@id="form"]/div/button')) 
         return True
 
     except Exception as e:
@@ -67,11 +65,12 @@ def demo_page(driver):
         gender = driver.find_elements(By.NAME, 'gender')
         if gender:
             selected_gender = random.choice(gender)
+            driver.execute_script("arguments[0].click();", selected_gender)  
             selected_gender.click()
 
         #age
         age_fill = wait_for_element(driver, By.XPATH, "//*[@id='id_age']")
-        age = random.randint(1,110)
+        age = random.randint(20,110)
         age_fill.send_keys(str(age))
         if age > 40:
             print("Participant screened out due to age.")
@@ -81,26 +80,25 @@ def demo_page(driver):
         academic = driver.find_elements(By.NAME, 'Academic_status')
         if academic:
             selected_education = random.choice(academic)
-            selected_education.click()
+            driver.execute_script("arguments[0].click();", selected_education)  
         #Marital field
         marital = driver.find_elements(By.NAME, 'Marital_status')
         if marital:
             selected_marital = random.choice(marital)
-            selected_marital.click()
+            driver.execute_script("arguments[0].click();", selected_marital)
         
         #income
-        income_fill = driver.find_element(By.NAME, 'Monthly_income')
+        income_fill = wait_for_element(driver, By.NAME, 'Monthly_income')
         income = random.randint(1, 20000)  
         income_fill.send_keys(str(income))
 
         #life_satisfaction
-        satisfaction_fill = driver.find_element(By.NAME, 'life_satisfaction_score')
+        satisfaction_fill = wait_for_element(driver, By.NAME, 'life_satisfaction_score')
         satisfaction = random.randint(1, 100)  
         satisfaction_fill.send_keys(str(satisfaction))
         
         # next button
-        next_button = wait_for_element(driver, By.XPATH, '//*[@id="form"]/div/button')
-        next_button.click()
+        driver.execute_script("arguments[0].click();", driver.find_element(By.XPATH, '//*[@id="form"]/div/button')) 
         return True
     except Exception as e:
         print(f"Error on the Demo page: {e}")
@@ -120,7 +118,7 @@ def popout_page(driver):
             selected_pic = random.choice(pic_options)
             selected_pic.click()
 
-            if selected_pic.get_attribute("value") == "pic-yes":
+            if selected_pic.get_dom_attribute("value") == "pic-yes":
                 text_input = driver.find_element(By.XPATH, '//*[@id="picYes"]')
                 text_input.send_keys("Excellent. What is the most important factor affecting your life satisfaction?")
             else:
@@ -128,9 +126,7 @@ def popout_page(driver):
                 text_input.send_keys("Excellent. What is the most important factor affecting your life dissatisfaction?")
 
         # next button
-        #next_button = driver.find_element(By.XPATH, '//*[@id ="form"]/div/button')
-        next_button = wait_for_element(driver, By.XPATH, '//*[@id="form"]/div/button')
-        next_button.click()
+        driver.execute_script("arguments[0].click();", driver.find_element(By.XPATH, '//*[@id="form"]/div/button')) 
         return True
     except Exception as e:
         print(f"Error on the popout page: {e}")
@@ -140,9 +136,7 @@ def popout_page(driver):
 
 def end_page(driver):
     try:
-        #next_button = driver.find_element(By.XPATH, '//*[@id = "form"]/div/button')
-        next_button = wait_for_element(driver, By.XPATH, '//*[@id="form"]/div/button')
-        next_button.click()
+        driver.execute_script("arguments[0].click();", driver.find_element(By.XPATH, '//*[@id="form"]/div/button')) 
     except Exception as e:
         print(f"Error on the end page: {e}")
         #driver.quit()
@@ -178,4 +172,4 @@ def run_bots(no_times, link):
             except Exception as e:
                 print(f"Error: driver.quit: {e}")
 
-run_bots(no_times=20, link=link)
+run_bots(no_times=10, link=link)
