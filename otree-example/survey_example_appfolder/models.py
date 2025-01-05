@@ -22,7 +22,7 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
     def creating_session(self):
         # Initialize gender quotas and counts
-        self.session.vars['gender_quota'] = {'Male': 2, 'Female': 2, 'Other': 1}
+        self.session.vars['gender_quota'] = {'Male': 50, 'Female': 50, 'Other': 50}
         self.session.vars['gender_counts'] = {'Male': 0, 'Female': 0, 'Other': 0}
 
         # Iterate over players and assign groups
